@@ -8,18 +8,18 @@ load("COVID_STL.mat");
 cases_STL2 = [cases_STL(1),diff(cases_STL)];
 deaths_STL2 = [deaths_STL(1),diff(deaths_STL)];
 
-measured_deaths = deaths_STL/POP_STL;
-measured_infected = cases_STL/POP_STL;
+measured_deaths = deaths_STL;
+measured_infected = cases_STL;
 
 plot(dates, [measured_infected;measured_deaths]);
 % *******************************************************************
 % From '2020-03-18' to '2021-06-23'
-x0 = [1-7/POP_STL, 7/POP_STL, 0, 0];
+x0 = [POP_STL-7, 7, 0, 0];
 
 infectious_rate = 0.0015;
-immune_rate = 0.0921;
-death_rate = 0.018;
-recover_rate = 0.201;
+immune_rate = 0.092;
+death_rate = 0.016;
+recover_rate = 0.28;
 rein_rate = 0.0005;
 
 A = [1-infectious_rate  1-(recover_rate+immune_rate+death_rate) rein_rate   0;
@@ -31,7 +31,7 @@ B = zeros(4,1);
 t = 1:67;
 
 y = model(A,B,t,x0);
-new_cases_model = cumsum([cases_STL(1)/POP_STL,(y(:,1)*infectious_rate).']);
+new_cases_model = cumsum([cases_STL(1),(y(:,1)*infectious_rate).']);
 new_cases_model = new_cases_model(1:67);
 
 err1 = immse(y(:,4).',measured_deaths(1:67));
@@ -40,18 +40,18 @@ err2 = immse(new_cases_model,measured_infected(1:67));
 figure;
 plot(new_cases_model);
 hold on;
-plot(y(:,2:4));
+plot(y(:,4));
 plot(measured_infected(1:67));
 plot(measured_deaths(1:67));
-legend("new cases model","Model I","Model R","Model D","measured infected","measured deaths",'Location','northwest')
+legend("new cases model","Model D","measured infected","measured deaths",'Location','northwest')
 
 % *******************************************************************
 % From '2021-06-30' to '2021-10-26'
-x0 = y(size(y,1),:);
+%x0 = y(size(y,1),:);
 
 infectious_rate = 0.00155;
 immune_rate = 0.092;
-death_rate = 0.008;
+death_rate = 0.0095;
 recover_rate = 0.20;
 rein_rate = 0.0005;
 
@@ -61,7 +61,7 @@ A = [1-infectious_rate  1-(recover_rate+immune_rate+death_rate) rein_rate   0;
      0                  death_rate                              0           1];
 
 t = (68:84)-67;
-
+x0 = A*y(size(y,1),:).';
 y1 = model(A,B,t,x0);
 new_cases_model2 = new_cases_model(length(new_cases_model))+cumsum((y1(:,1)*infectious_rate).');
 
@@ -71,18 +71,18 @@ err4 = immse(new_cases_model2,measured_infected(68:84));
 figure;
 plot(new_cases_model2);
 hold on;
-plot(y1(:,2:4));
+plot(y1(:,4));
 plot(measured_infected(68:84));
 plot(measured_deaths(68:84));
-legend("new cases model","Model I","Model R","Model D","measured infected","measured deaths",'Location','northwest')
+legend("new cases model","Model D","measured infected","measured deaths",'Location','northwest')
 % *******************************************************************
 % From '2021-10-27' to '2022-03-22'
 x0 = y1(size(y1,1),:);
 
 infectious_rate = 0.0044;
-immune_rate = 0.092;
-death_rate = 0.007;
-recover_rate = 0.204;
+immune_rate = 0.15;
+death_rate = 0.0045;
+recover_rate = 0.45;
 rein_rate = 0.0005;
 
 
@@ -91,7 +91,7 @@ A = [1-infectious_rate  1-(recover_rate+immune_rate+death_rate) rein_rate   0;
      infectious_rate    recover_rate                            0           0;
      0                  immune_rate                             1-rein_rate 0;
      0                  death_rate                              0           1];
-
+x0 = A*y1(size(y1,1),:).';
 y2 = model(A,B,t,x0);
 new_cases_model3 = new_cases_model2(length(new_cases_model2))+cumsum((y2(:,1)*infectious_rate).');
 
@@ -101,18 +101,18 @@ err6 = immse(new_cases_model3,measured_infected(85:105));
 figure;
 plot(new_cases_model3);
 hold on;
-plot(y2(:,2:4));
+plot(y2(:,4));
 plot(measured_infected(85:105));
 plot(measured_deaths(85:105));
-legend("new cases model","Model I","Model R","Model D","measured infected","measured deaths",'Location','northwest')
+legend("new cases model","Model D","measured infected","measured deaths",'Location','northwest')
 % *******************************************************************
 % From '2021-10-27' to '2022-03-22'
 x0 = y2(size(y2,1),:);
 
-infectious_rate = 0.0015;
-immune_rate = 0.092;
-death_rate = 0.004;
-recover_rate = 0.2;
+infectious_rate = 0.0017;
+immune_rate = 0.2;
+death_rate = 0.0032;
+recover_rate = 0.45;
 rein_rate = 0.0005;
 
 
@@ -122,6 +122,7 @@ A = [1-infectious_rate  1-(recover_rate+immune_rate+death_rate) rein_rate   0;
      0                  immune_rate                             1-rein_rate 0;
      0                  death_rate                              0           1];
 
+x0 = A*y2(size(y2,1),:).';
 y3 = model(A,B,t,x0);
 new_cases_model4 = new_cases_model3(length(new_cases_model3))+cumsum((y3(:,1)*infectious_rate).');
 
@@ -136,7 +137,13 @@ plot(measured_infected(106:158));
 plot(measured_deaths(106:158));
 legend("new cases model","Model D","measured infected","measured deaths",'Location','northwest')
 % *******************************************************************
-
+x = [y;y1;y2;y3];
+measured = [measured_infected;measured_deaths].';
+figure
+plot(x(:,4));
+hold on;
+plot(measured_deaths);
+legend("S","I","R","D");
 
 %% Define functions
 % Model function without input
