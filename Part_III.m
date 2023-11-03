@@ -18,7 +18,7 @@ X2(:,1) = [POP_2,0,0,0]';
 Xt2 = zeros(4,days);
 Xt2(:,1) = [POP_2,0,0,0]';
 
-% Set up two A
+% Set up A1 with arbitrary rates
 infectious_rate = 0.003;
 immune_rate = 0.092;
 death_rate = 0.0086;
@@ -29,6 +29,7 @@ A1 = [1-infectious_rate recover_rate                            rein_rate   0;
      0                  immune_rate                             1-rein_rate 0;
      0                  death_rate                              0           1];
 
+% Set up A2 with arbitrary rates
 infectious_rate_2 = 0.002;
 immune_rate_2 = 0.0921;
 death_rate_2 = 0.018;
@@ -95,7 +96,7 @@ plot(t,Cumulative_Case);
 plot(t,Cumulative_Case_with_Travel);
 plot(t,Cumulative_Case2);
 plot(t,Cumulative_Case_with_Travel2);
-
+title("Cumulative Case Proportion of Interaction of two Distinct Population");
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("infected",'infected with travel',"infected 2",'infected with travel 2');
@@ -104,6 +105,7 @@ figure;
 hold on;
 plot(t,Total);
 plot(t,Total_Travel);
+title("Total Cumulative Case Proportions");
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("total cumulative", 'total cumulative with travel');
@@ -162,7 +164,7 @@ plot(t,Cumulative_Case);
 plot(t,Cumulative_Case_with_Travel);
 plot(t,Cumulative_Case2);
 plot(t,Cumulative_Case_with_Travel2);
-
+title("Cumulative Case Proportion of Interaction of two Distinct Population");
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("infected",'infected with travel',"infected 2",'infected with travel 2');
@@ -174,8 +176,7 @@ figure;
 hold on;
 plot(t,Total);
 plot(t,Total_Travel);
+title("Total Cumulative Case Proportions");
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("total cumulative", 'total cumulative with travel');
-
-
