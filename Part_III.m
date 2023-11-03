@@ -74,10 +74,17 @@ for i = 1:days-1
 end
 
 % Calculate the cumulative cases number proportional to the total population 
-Cumulative_Case = cumsum(X(1,:)*infectious_rate')/POP_STL;
-Cumulative_Case2 = cumsum(X2(1,:)*infectious_rate_2')/POP_2;
+Cumulative_Case = cumsum(X(1,:)*infectious_rate');
+Cumulative_Case2 = cumsum(X2(1,:)*infectious_rate_2');
 Cumulative_Case_with_Travel = cumsum(Xt(1,:)*infectious_rate');
 Cumulative_Case_with_Travel2 = cumsum(Xt2(1,:)*infectious_rate_2');
+
+% Calculate the cumulative cases for the combined of the two cities.
+Total = (Cumulative_Case + Cumulative_Case2)/(POP_STL+POP_2);
+Total_Travel = (Cumulative_Case_with_Travel+Cumulative_Case_with_Travel2)/(POP_STL+POP_2);
+
+Cumulative_Case = Cumulative_Case/POP_STL;
+Cumulative_Case2 = Cumulative_Case2/POP_2;
 
 % Calculate the cumulative cases number proportional to the population each
 % day
@@ -86,29 +93,29 @@ for i = 1:days
     Cumulative_Case_with_Travel2(:,i) = Cumulative_Case_with_Travel2(:,i)/newPop_2(:,i);
 end
 
-% Calculate the cumulative cases for the combined of the two cities.
-Total = (Cumulative_Case + Cumulative_Case2)/(POP_STL+POP_2);
-Total_Travel = (Cumulative_Case_with_Travel+Cumulative_Case_with_Travel2)/(POP_STL+POP_2);
-
 % Plot the data
 hold on;
 plot(t,Cumulative_Case);
 plot(t,Cumulative_Case_with_Travel);
 plot(t,Cumulative_Case2);
 plot(t,Cumulative_Case_with_Travel2);
-title("Cumulative Case Proportion of Interaction of two Distinct Population");
+title("Cumulative Case Proportion of Interaction of two Distinct Population")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("infected",'infected with travel',"infected 2",'infected with travel 2');
+ax = gca;
+exportgraphics(ax,'plot1.jpg');
 
 figure;
 hold on;
 plot(t,Total);
 plot(t,Total_Travel);
-title("Total Cumulative Case Proportions");
+title("Total Cumulative Case Proportions")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("total cumulative", 'total cumulative with travel');
+ax = gca;
+exportgraphics(ax,'plot2.jpg');
 
 % ********************************************************************
 %% 4.2.1 Part III, Question 2
@@ -149,6 +156,9 @@ end
 Cumulative_Case_with_Travel = cumsum(Xt(1,:)*infectious_rate');
 Cumulative_Case_with_Travel2 = cumsum(Xt2(1,:)*infectious_rate_2');
 
+% Calculate the cumulative cases for the combined of the two cities.
+Total_Travel = (Cumulative_Case_with_Travel+Cumulative_Case_with_Travel2)/(POP_STL+POP_2);
+
 % Calculate the cumulative cases number proportional to the population each
 % day
 for i = 1:days
@@ -164,19 +174,21 @@ plot(t,Cumulative_Case);
 plot(t,Cumulative_Case_with_Travel);
 plot(t,Cumulative_Case2);
 plot(t,Cumulative_Case_with_Travel2);
-title("Cumulative Case Proportion of Interaction of two Distinct Population");
+title("Cumulative Case Proportion of Interaction of two Distinct Population")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("infected",'infected with travel',"infected 2",'infected with travel 2');
+ax = gca;
+exportgraphics(ax,'plot3.jpg');
 
-% Calculate the cumulative cases for the combined of the two cities.
-Total_Travel = (Cumulative_Case_with_Travel+Cumulative_Case_with_Travel2)/(POP_STL+POP_2);
 
 figure;
 hold on;
 plot(t,Total);
 plot(t,Total_Travel);
-title("Total Cumulative Case Proportions");
+title("Total Cumulative Case Proportions")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("total cumulative", 'total cumulative with travel');
+ax = gca;
+exportgraphics(ax,'plot4.jpg');
