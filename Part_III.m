@@ -103,8 +103,6 @@ title("Cumulative Case Proportion of Interaction of two Distinct Population")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("infected",'infected with travel',"infected 2",'infected with travel 2');
-ax = gca;
-exportgraphics(ax,'plot1.jpg');
 
 figure;
 hold on;
@@ -114,8 +112,6 @@ title("Total Cumulative Case Proportions")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("total cumulative", 'total cumulative with travel');
-ax = gca;
-exportgraphics(ax,'plot2.jpg');
 
 % ********************************************************************
 %% 4.2.1 Part III, Question 2
@@ -132,12 +128,7 @@ for i = section1+1 : size(u1,1)
     u2(i) = u2(i) * (0.0005 + (0.005-0.0005) * rand);
 end
 
-
 for i = 1:days-1
-    % %% Without travel SIRD number
-    % X(:,i+1) = A1 * X(:,i);
-    % X2(:,i+1) = A2 * X2(:,i);
-    
     %% With travel
     % new total population
     newPop_stl(:,i+1) = newPop_stl(:,i) - u1(i,:) + u2(i,:);
@@ -178,9 +169,7 @@ title("Cumulative Case Proportion of Interaction of two Distinct Population")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("infected",'infected with travel',"infected 2",'infected with travel 2');
-ax = gca;
-exportgraphics(ax,'plot3.jpg');
-
+snapnow
 
 figure;
 hold on;
@@ -190,5 +179,5 @@ title("Total Cumulative Case Proportions")
 xlabel("time");
 ylabel("Cumulative Case proportional to the population");
 legend("total cumulative", 'total cumulative with travel');
-ax = gca;
-exportgraphics(ax,'plot4.jpg');
+snapnow
+% *********************************************************************
